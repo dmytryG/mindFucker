@@ -1,3 +1,5 @@
+#Just messages for user
+
 def error(msg: str, *args, **kwargs):
     string = "[ERROR] " + msg
     for i in args:

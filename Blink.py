@@ -6,7 +6,7 @@ import threading
 from time import sleep
 import ctypes
 
-
+# queue class for work with methods that should be called from main thread
 class displayController:
     que = []
     def addToQ(self, item, args, **kwargs):
@@ -17,8 +17,8 @@ class displayController:
             item = self.que.pop()
             item[0](item[1])
 
+# Blinking window class
 class Blink:
-
     dc: displayController = None
     frame: graphics.GraphWin = None
     delta: int = 5

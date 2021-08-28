@@ -1,3 +1,7 @@
+#Sorry for bad english in comments((((
+#It actully not my primary language
+
+
 import graphics
 import AccelBrainBeat
 import threading
@@ -6,25 +10,25 @@ import Blink
 import MyAudioOld
 import MyConsole
 
-config = MyConsole.MyConfig()
-bb = MyAudioOld.MyAudio()
-dc = Blink.displayController()
-bw = Blink.Blink(dc)
-console = MyConsole.MyConsole(bb, dc, bw, config)
+config = MyConsole.MyConfig() #Initialize config
+bb = MyAudioOld.MyAudio()   #initialize binaular beat generator
+dc = Blink.displayController()  #Initialize display queue
+bw = Blink.Blink(dc)    #Initialize blinking window
+console = MyConsole.MyConsole(bb, dc, bw, config)   #Initialize confole control
 
 
 def main():
-    bt = threading.Thread(target=bw.blinkLoop)
-    bb.setFrequence(220)
-    bbt = threading.Thread(target=bb.playLoop)
-    bbt.start()
+    bt = threading.Thread(target=bw.blinkLoop)  #Initialize blinking window thread
+    bb.setFrequence(220)    #Setting default frequncy (for audio)
+    bbt = threading.Thread(target=bb.playLoop)  #Initialize audio thread
+    bbt.start() #Starting threads
     bt.start()
     console.setIsPlay(True)
 
     threading.Thread(target=console.consoleThreadLoop).start()
 
 
-    while True:
+    while True:     #Main thread (loop) for working with window
         dc.loop()
 
 

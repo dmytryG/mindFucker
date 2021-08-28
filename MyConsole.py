@@ -2,9 +2,10 @@ import Blink
 import MyAudioOld
 import ConsoleErrors
 
+#Class that stores current data
 class MyConfig:
     frequncy: int = 1
-    delta: int = 1
+    delta: int = 1 #ACTUALLY BEAT FREQUENCY!!!!!!!!
     run: bool = False
 
     def saveConfigToFile(self, filename: str):
@@ -16,6 +17,10 @@ class MyConfig:
             ConsoleErrors.error("Error during writing file. Config wasn't written")
 
     def loadConfigToFile(self, filename: str):
+        oldConfig = MyConfig()
+        oldConfig.delta=self.delta
+        oldConfig.run=self.run
+        oldConfig.frequncy=self.frequncy
         try:
             f = open(filename+".mf", 'r')
             l = f.readline()
@@ -38,6 +43,10 @@ class MyConfig:
                 raise (f"Parameter can't be {l}")
             f.close()
         except:
+            #If there are some errors with file loading, config doesn't change
+            self.frequncy=oldConfig.frequncy
+            self.delta = oldConfig.delta
+            self.run = oldConfig.run
             ConsoleErrors.error("Error during reading file. Config wasn't loaded")
 
 
@@ -64,6 +73,7 @@ class MyConsole:
         self.audio.isStarted = False
         self.display.isPaused = True
 
+    #Should be callsed after updating config (sets parameters of modules to config parameters)
     def applyConfig(self):
         self.audio.setFrequence(self.config.frequncy)
         self.audio.setDelta(self.config.delta)
@@ -83,6 +93,7 @@ class MyConsole:
         self.config.run=isPlay
         self.applyConfig()
 
+    #Check obtained string, sets parameters to config, applying config
     def consoleCommand(self, string: str):
         try:
             args: list = string.split(" ")
@@ -126,6 +137,7 @@ class MyConsole:
         except:
             ConsoleErrors.error("Unexpected console args")
 
+    # Console loop (gets cl user input and calls method for analyse and act due to command
     def consoleThreadLoop(self):
         while (True):
             data = input("# ")
